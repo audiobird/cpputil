@@ -77,7 +77,7 @@ public:
 		return state == 0;
 	}
 
-	constexpr bool size() const {
+	constexpr uint8_t size() const {
 		return bit_cnt;
 	}
 

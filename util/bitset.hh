@@ -61,7 +61,7 @@ public:
 		return reference{state, pos};
 	}
 
-	constexpr std::size_t count() const {
+	constexpr uint8_t count() const {
 		return std::popcount(state);
 	}
 

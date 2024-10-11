@@ -5,6 +5,12 @@
 #include <cstdint>
 #include <type_traits>
 
+// checks if value is within range
+template<typename T>
+inline constexpr bool is_within(const T &val, const T &min, const T &max) {
+	return std::clamp(val, min, max) == val;
+}
+
 // uses the smallest unsigned integer that can fit the given value
 template<uint32_t size>
 using smallest_uint = std::conditional_t < size < 256,

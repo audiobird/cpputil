@@ -13,6 +13,12 @@ public:
 	bool state() const {
 		return _state;
 	}
+	bool was_just_pressed() const {
+		return _edge && _state;
+	}
+	bool was_just_released() const {
+		return _edge && !_state;
+	}
 	void update(bool state) {
 		_edge = state != _state;
 		_state = state;

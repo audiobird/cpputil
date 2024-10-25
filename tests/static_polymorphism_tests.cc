@@ -1,7 +1,5 @@
 #include "doctest.h"
 #include "util/static_polymorphism.hh"
-#include <iostream>
-#include <vector>
 
 TEST_CASE("Static Polymorphic Default") {
 	struct Base {

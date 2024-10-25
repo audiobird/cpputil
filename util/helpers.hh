@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cstdint>
+#include <cstdlib>
 #include <type_traits>
 
 // checks if value is within range
@@ -18,7 +19,7 @@ using smallest_uint = std::conditional_t < size < 256,
 
 // returns the size of the largest type
 template<typename... Ts>
-inline constexpr std::size_t sizeofLargestType() {
+inline constexpr std::size_t sizeof_largest_type() {
 	const auto arr = std::array<std::size_t, sizeof...(Ts)>{sizeof(Ts)...};
 	return *std::max_element(arr.begin(), arr.end());
 }
@@ -48,9 +49,9 @@ static_assert(is_same_as<bool, bool, int, float>());
 static_assert(is_same_as<double, int, float, int, double>());
 static_assert(!is_same_as<bool, int, float, double>());
 
-static_assert(sizeofLargestType<bool, uint8_t, int16_t, uint32_t, uint64_t>() == sizeof(uint64_t));
-static_assert(sizeofLargestType<bool, uint8_t, int16_t>() == sizeof(int16_t));
-static_assert(sizeofLargestType<bool *, uint8_t>() == sizeof(bool *));
+static_assert(sizeof_largest_type<bool, uint8_t, int16_t, uint32_t, uint64_t>() == sizeof(uint64_t));
+static_assert(sizeof_largest_type<bool, uint8_t, int16_t>() == sizeof(int16_t));
+static_assert(sizeof_largest_type<bool *, uint8_t>() == sizeof(bool *));
 
 static_assert(is_same_as<smallest_uint<1>, uint8_t>());
 static_assert(is_same_as<smallest_uint<255>, uint8_t>());

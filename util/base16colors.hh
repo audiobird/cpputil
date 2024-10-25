@@ -6,14 +6,14 @@
 namespace Base16
 {
 enum class Color {
-	WHITE,
-	GREY0,
-	GREY1,
-	GREY2,
-	GREY3,
-	GREY4,
-	GREY5,
 	BLACK,
+	GREY5,
+	GREY4,
+	GREY3,
+	GREY2,
+	GREY1,
+	GREY0,
+	WHITE,
 	RED,
 	ORANGE,
 	YELLOW,
@@ -24,6 +24,10 @@ enum class Color {
 	PINK,
 };
 
+inline constexpr Color index(const unsigned idx) {
+	return static_cast<Color>(idx);
+}
+
 using Palette = std::array<::Color, 16>;
 
 inline constexpr const ::Color &toRGB(const Palette &palette, const Color color) {
@@ -33,14 +37,14 @@ inline constexpr const ::Color &toRGB(const Palette &palette, const Color color)
 namespace Theme
 {
 inline constexpr Palette espresso{
-	::Color{0x2d, 0x2d, 0x2d}, // white
-	::Color{0x39, 0x39, 0x39}, // grey0
-	::Color{0x51, 0x51, 0x51}, // grey1
-	::Color{0x77, 0x77, 0x77}, // grey2
-	::Color{0xb4, 0xb7, 0xb4}, // grey3
-	::Color{0xcc, 0xcc, 0xcc}, // grey4
-	::Color{0xe0, 0xe0, 0xe0}, // grey5
-	::Color{0xff, 0xff, 0xff}, // black
+	::Color{0x2d, 0x2d, 0x2d}, // black
+	::Color{0x39, 0x39, 0x39}, // grey5
+	::Color{0x51, 0x51, 0x51}, // grey4
+	::Color{0x77, 0x77, 0x77}, // grey3
+	::Color{0xb4, 0xb7, 0xb4}, // grey2
+	::Color{0xcc, 0xcc, 0xcc}, // grey1
+	::Color{0xe0, 0xe0, 0xe0}, // grey0
+	::Color{0xff, 0xff, 0xff}, // white
 	::Color{0xd2, 0x52, 0x52}, // red
 	::Color{0xf9, 0xa9, 0x59}, // orange
 	::Color{0xff, 0xc6, 0x6d}, // yellow

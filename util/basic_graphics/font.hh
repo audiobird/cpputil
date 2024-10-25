@@ -1,17 +1,24 @@
 #pragma once
 
 #include "raw_fonts.hh"
+#include <type_traits>
 
 namespace Font
 {
+template<typename T>
+concept is_array = std::is_array_v<T>;
+
 struct Font {
 	unsigned width;
 	unsigned height;
+	unsigned offset;
 	unsigned num_chars;
-	constexpr Font(const unsigned char *raw, unsigned w, unsigned h, unsigned num_chars)
-		: raw{raw}
+
+	constexpr Font(auto &arr, unsigned w, unsigned h, unsigned num_chars)
+		: raw{arr.data()}
 		, width{w}
 		, height{h}
+		, offset{static_cast<unsigned>(arr.size() / num_chars)}
 		, num_chars{num_chars} {
 	}
 	constexpr const unsigned char &operator[](unsigned idx) const {
@@ -22,5 +29,8 @@ private:
 	const unsigned char *raw;
 };
 
-inline constexpr auto TI5x7 = Font{Fonts::Raw::TI5x7raw.data(), 5u, 7u, 95u};
+inline constexpr auto Font8x16x95 = Font{Fonts::Raw::Font8x16x95, 8u, 16u, 95u};
+inline constexpr auto Font6x7x95 = Font{Fonts::Raw::Font6x7x95, 6u, 7u, 95u};
+inline constexpr auto Font8x8x95 = Font{Fonts::Raw::Font8x8x95, 8u, 8u, 95u};
+inline constexpr auto Font8x8x95xSquare = Font{Fonts::Raw::Font8x8x95xSquare, 8u, 8u, 95u};
 } // namespace Font

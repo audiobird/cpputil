@@ -3,8 +3,8 @@
 #include <cstdint>
 
 class MomentarySwitch {
-	uint8_t _state : 1;
-	uint8_t _edge : 1;
+	uint8_t _state : 1 {};
+	uint8_t _edge : 1 {};
 
 public:
 	bool edge() const {

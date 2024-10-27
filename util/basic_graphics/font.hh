@@ -1,6 +1,7 @@
 #pragma once
 
 #include "raw_fonts.hh"
+#include <cstdint>
 #include <type_traits>
 
 namespace Font
@@ -12,9 +13,9 @@ struct Font {
 	unsigned width;
 	unsigned height;
 	unsigned offset;
-	unsigned num_chars;
+	uint8_t num_chars;
 
-	constexpr Font(auto &arr, unsigned w, unsigned h, unsigned num_chars)
+	constexpr Font(auto &arr, unsigned w, unsigned h, uint8_t num_chars)
 		: raw{arr.data()}
 		, width{w}
 		, height{h}

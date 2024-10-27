@@ -12,19 +12,19 @@ class SimpleGraphics : public G {
 
 	static constexpr auto char_buffer_max = std::max<unsigned>(PRINTF_BUFFER_MAX, sizeof("-2147483648"));
 	const Font::Font *font = &Font::Font6x7x95;
-	unsigned zoom{1};
+	int zoom{1};
 	unsigned x{0};
 	unsigned y{0};
 	char buff[char_buffer_max];
 
 public:
 	void draw_h_line(int x, int y, int w, G::ColorT color) {
-		for (auto i = 0u; i < w; i++)
+		for (auto i = 0; i < w; i++)
 			G::draw_pixel(x + i, y, color);
 	}
 
 	void draw_v_line(int x, int y, int h, G::ColorT color) {
-		for (auto i = 0u; i < h; i++)
+		for (auto i = 0; i < h; i++)
 			G::draw_pixel(x, y + i, color);
 	}
 
@@ -42,7 +42,7 @@ public:
 	}
 
 	void fill_rect(int x, int y, int w, int h, G::ColorT color) {
-		for (auto i = 0u; i < w; i++) {
+		for (auto i = 0; i < w; i++) {
 			draw_v_line(x + i, y, h, color);
 		}
 	}

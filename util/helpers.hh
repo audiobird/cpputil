@@ -14,8 +14,29 @@ inline constexpr bool is_within(const T &val, const T &min, const T &max) {
 
 // uses the smallest unsigned integer that can fit the given value
 template<uint32_t size>
-using smallest_uint = std::conditional_t < size < 256,
+using smallest_uint_type = std::conditional_t < size < 256,
 	  uint8_t, std::conditional_t<size<65536, uint16_t, uint32_t>>;
+
+// uses the smallest signed integer that can fit the given value
+template<int32_t min, int32_t max>
+class smallest_int {
+	static constexpr auto get_max = []() {
+		const auto m = min < 0 ? -min : min;
+		return std::max(m, max);
+	};
+
+	static constexpr auto abs_min_is_max = get_max() != max;
+	static constexpr auto max8 = abs_min_is_max ? -INT8_MIN : INT8_MAX;
+	static constexpr auto max16 = abs_min_is_max ? -INT16_MIN : INT16_MAX;
+
+	static constexpr auto m = get_max();
+
+public:
+	using type = std::conditional_t<m <= max8, int8_t, std::conditional_t<m <= max16, int16_t, int32_t>>;
+};
+
+template<int32_t min, int32_t max>
+using smallest_int_type = smallest_int<min, max>::type;
 
 // returns the size of the largest type
 template<typename... Ts>
@@ -53,11 +74,18 @@ static_assert(sizeof_largest_type<bool, uint8_t, int16_t, uint32_t, uint64_t>() 
 static_assert(sizeof_largest_type<bool, uint8_t, int16_t>() == sizeof(int16_t));
 static_assert(sizeof_largest_type<bool *, uint8_t>() == sizeof(bool *));
 
-static_assert(is_same_as<smallest_uint<1>, uint8_t>());
-static_assert(is_same_as<smallest_uint<255>, uint8_t>());
-static_assert(is_same_as<smallest_uint<256>, uint16_t>());
-static_assert(is_same_as<smallest_uint<65535>, uint16_t>());
-static_assert(is_same_as<smallest_uint<65536>, uint32_t>());
+static_assert(is_same_as<smallest_uint_type<1>, uint8_t>());
+static_assert(is_same_as<smallest_uint_type<255>, uint8_t>());
+static_assert(is_same_as<smallest_uint_type<256>, uint16_t>());
+static_assert(is_same_as<smallest_uint_type<65535>, uint16_t>());
+static_assert(is_same_as<smallest_uint_type<65536>, uint32_t>());
+
+static_assert(is_same_as<smallest_int_type<-128, 127>, int8_t>());
+static_assert(is_same_as<smallest_int_type<0, 127>, int8_t>());
+static_assert(is_same_as<smallest_int_type<-129, 127>, int16_t>());
+static_assert(is_same_as<smallest_int_type<0, 128>, int16_t>());
+static_assert(is_same_as<smallest_int_type<-32768, 32767>, int16_t>());
+static_assert(is_same_as<smallest_int_type<-32769, 32767>, int32_t>());
 
 static_assert([] {
 	class Base {};

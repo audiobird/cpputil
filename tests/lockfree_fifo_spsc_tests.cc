@@ -32,6 +32,24 @@ TEST_CASE("Basic usage: Does not overwrites if put() past end") {
 	CHECK(a.get().value() == 4);
 }
 
+TEST_CASE("Basic usage: Put() span") {
+	LockFreeFifoSpsc<int, 8> a;
+
+	int items[5] = {0, 1, 2, 3, 4};
+
+	CHECK(a.put(items) == true);
+
+	//try to overfill
+	CHECK(a.put(items) == false);
+
+	CHECK(a.get().value() == 0);
+	CHECK(a.get().value() == 1);
+	CHECK(a.get().value() == 2);
+	CHECK(a.get().value() == 3);
+	CHECK(a.get().value() == 4);
+	CHECK(a.empty() == true);
+}
+
 TEST_CASE("Basic usage: Interleaving put/get is ok") {
 	LockFreeFifoSpsc<int, 4> a;
 

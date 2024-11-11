@@ -43,6 +43,24 @@ public:
 		return true;
 	}
 
+	bool put(std::span<T> items) {
+		auto tmp_head = head_.load(std::memory_order_relaxed);
+
+		const auto cap_free = max_size_ - (tmp_head - tail_.load(std::memory_order_acquire));
+
+		if (items.size() > cap_free)
+			return false;
+
+		for (auto i = 0u; i < items.size(); ++i) {
+			buf_[tmp_head & SIZE_MASK] = items[i];
+			tmp_head++;
+		}
+
+		std::atomic_signal_fence(std::memory_order_release);
+		head_.store(tmp_head, std::memory_order_release);
+		return true;
+	}
+
 	// Number of elements available to write
 	size_t num_free() const {
 		return max_size_ - (head_.load(std::memory_order_relaxed) - tail_.load(std::memory_order_acquire));
